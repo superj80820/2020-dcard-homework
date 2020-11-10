@@ -12,11 +12,10 @@ type RateLimit struct {
 // RateLimitRepository ...
 type RateLimitRepository interface {
 	GetByIP(ctx context.Context, IP string) (*RateLimit, error)
-	Store(ctx context.Context, r *RateLimit) error
+	Store(ctx context.Context, rateLimit *RateLimit) error
 }
 
 // RateLimitUsecase ..
 type RateLimitUsecase interface {
-	Store(ctx context.Context, r *RateLimit) error
-	isTooManyRequests(ctx context.Context, IP string) (bool, error)
+	IsTooManyRequests(ctx context.Context, IP string) (bool, int, error)
 }
