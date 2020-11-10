@@ -1,6 +1,6 @@
 # 2020-dcard-homework
 
-## 驗收步驟
+## 供 Dcard 人員驗收，謝謝
 
 1. 啟動 Golang Server 與 Redis: `$ docker-compose -f docker-compose.prod.yaml up`
 2. 開啟網頁至`localhost:3000`，如果一分鐘內超過 60 次 requests 顯示 Error，否則顯示 requests 數。
@@ -9,13 +9,10 @@
 - 測試:
   - [Unit Test](#unit-test)
   - [E2E](#e2e-test): 可驗證是否有 race-condition
-
-## 功能
-
-- 每個 IP 每分鐘僅能接受 60 個 requests
-- 在首頁顯示目前的 request 量,超過限制的話則顯示 “Error”,例如在一分鐘內第 30 個 request 則顯示 30，第 61 個 request 則顯示 Error
-- 可以使用任意資料庫，也可以自行設計 in-memory 資料結構，並在文件中說明理由
-- 請附上測試
+- 整體設計採用[bxcodec](https://github.com/bxcodec)的[Clean Architecture](https://github.com/bxcodec/go-clean-arch)架構，我有針對此架構寫了以下文章:
+  - [你的 Backend 可以更有彈性一點 - Clean Architecture 概念篇](https://ithelp.ithome.com.tw/articles/10240228)
+  - [你的 Backend 可以更有彈性一點 - Clean Architecture 實作篇](https://ithelp.ithome.com.tw/articles/10241479)
+  - [你的 Backend 可以更有彈性一點 - Clean Architecture 測試篇](https://ithelp.ithome.com.tw/articles/10241698)
 
 ## 需要安裝
 
