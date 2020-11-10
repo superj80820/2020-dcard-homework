@@ -13,11 +13,7 @@ import (
 )
 
 func init() {
-	viper.SetConfigFile(".env")
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(err)
-	}
+	viper.AutomaticEnv()
 }
 
 func main() {

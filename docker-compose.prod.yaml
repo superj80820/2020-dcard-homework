@@ -9,6 +9,10 @@ services:
     restart: always
   server:
     image: superj80820/2020-dcard-homework
+    environment:
+      - RESTFULHOST=0.0.0.0
+      - RESTFULPORT=3000
+      - REDISADDRESS=redis:6379
     ports:
       - "3000:3000"
     restart: always
