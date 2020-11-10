@@ -11,6 +11,7 @@ services:
     image: golang:1.14.6-alpine
     volumes:
       - .:/app
+    env_file: ./.env
     working_dir: /app
     entrypoint: go run cmd/main.go
     ports:
