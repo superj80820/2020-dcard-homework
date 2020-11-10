@@ -5,7 +5,10 @@
 1. 啟動 Golang Server 與 Redis: `$ docker-compose -f docker-compose.prod.yaml up`
 2. 開啟網頁至`localhost:3000`，如果一分鐘內超過 60 次 requests 顯示 Error，否則顯示 requests 數。
 
-- 如需驗證 race-condition 可閱讀 [E2E](#e2e-test)
+- in-memory 資料結構採用 Redis，理由是可以在分佈式系統連結各個微服務，並且有著良好的性能
+- 測試:
+  - [Unit Test](#unit-test)
+  - [E2E](#e2e-test): 可驗證是否有 race-condition
 
 ## 功能
 
