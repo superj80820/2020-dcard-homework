@@ -15,3 +15,23 @@
   - 設計 SET: IP:requestsCount
   - SET 必須要有 60s expire time，每次更新都重置 expire time
 - [ ] 撰寫首頁，使用 `limit-rate usecase`，如果 usecase 成功就顯示 requests count，失敗就顯示 Error
+- [ ] 撰寫 README
+- [ ] 撰寫 k8s yaml 檔案
+
+## Development
+
+```bash
+$ docker-compose -f docker-compose.dev.yaml up
+```
+
+## Production
+
+```bash
+$ docker-compose -f docker-compose.prod.yaml up --build
+```
+
+## E2E testing
+
+```bash
+$ go run ./test/E2E/race-condition.go
+```

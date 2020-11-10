@@ -21,10 +21,26 @@ func NewRateLimitUsecase(rateLimitRepo domain.RateLimitRepository) domain.RateLi
 }
 
 func (ru *rateLimitUsecase) IsTooManyRequests(ctx context.Context, IP string) (bool, int, error) {
-	rateLimit, err := ru.RateLimitRepo.GetByIP(ctx, IP)
+	if err := ru.RateLimitRepo.Lock(); err != nil {
+		logrus.WithFields(logrus.Fields{"logID": "30526a5e-2a48-4aea-805c-4d2597209d3d", "Error": err}).Error("Lock error")
+		return false, 0, errors.Wrap(err, "Lock error")
+	}
+	defer func() {
+		if err := ru.RateLimitRepo.Unlock(); err != nil {
+			logrus.WithFields(logrus.Fields{"logID": "0ba31678-a572-440d-8ad0-65706e8c2cd8", "Error": err}).Error("Unlock error")
+		}
+	}()
+
+	rateLimit, isExist, err := ru.RateLimitRepo.GetByIP(ctx, IP)
 	if err != nil {
 		logrus.WithFields(logrus.Fields{"logID": "99a5f41a-e232-4872-99b9-6a7cef6eaee0", "Error": err}).Error("Get repository error")
 		return false, 0, errors.Wrap(err, "Get repository error")
+	}
+
+	if !isExist {
+		rateLimit.IP = IP
+		rateLimit.Count = 0
+		rateLimit.ExpireTime = 60
 	}
 
 	rateLimit.Count++

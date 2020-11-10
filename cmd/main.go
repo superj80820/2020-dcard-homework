@@ -1,10 +1,11 @@
 package main
 
 import (
-	"log"
-
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
+	goredislib "github.com/go-redis/redis/v8"
+	"github.com/go-redsync/redsync/v4"
+	"github.com/go-redsync/redsync/v4/redis/goredis/v8"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	_rateLimitHttpDelivery "github.com/superj80820/2020-dcard-homework/rate-limit/delivery/http"
 	_rateLimitRepo "github.com/superj80820/2020-dcard-homework/rate-limit/repository"
@@ -24,20 +25,22 @@ func main() {
 	restfulPort := viper.GetString("RESTFULPORT")
 	redisAddress := viper.GetString("REDISADDRESS")
 
-	rdb := redis.NewClient(&redis.Options{
+	redisClient := goredislib.NewClient(&goredislib.Options{
 		Addr:     redisAddress,
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Password: "",
+		DB:       0,
 	})
+	redisPool := goredis.NewPool(redisClient)
+	redisMutex := redsync.New(redisPool).NewMutex("dcard-service")
 
-	rateLimitRepo := _rateLimitRepo.RedisRedisRateLimitRepository(rdb)
+	rateLimitRepo := _rateLimitRepo.NewRedisRateLimitRepository(redisClient, redisMutex)
 
 	rateLimitUsecase := _rateLimitUsecase.NewRateLimitUsecase(rateLimitRepo)
 
-	log.Print("HTTP server started")
+	logrus.Info("HTTP server started")
 	engine := gin.Default()
 
 	_rateLimitHttpDelivery.NewRateLimitHandler(engine, rateLimitUsecase)
 
-	log.Fatal(engine.Run(restfulHost + ":" + restfulPort))
+	logrus.Fatal(engine.Run(restfulHost + ":" + restfulPort))
 }

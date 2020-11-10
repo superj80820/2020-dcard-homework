@@ -11,7 +11,9 @@ type RateLimit struct {
 
 // RateLimitRepository ...
 type RateLimitRepository interface {
-	GetByIP(ctx context.Context, IP string) (*RateLimit, error)
+	Lock() error
+	Unlock() error
+	GetByIP(ctx context.Context, IP string) (*RateLimit, bool, error)
 	Store(ctx context.Context, rateLimit *RateLimit) error
 }
 
