@@ -9,14 +9,15 @@
 
 ## TODO
 
-- [ ] 設計 `docker-compose`: Golang Server, Redis 配置
-- [ ] 設計 `Redis repository`: 讀寫 Redis
-- [ ] 設計 `limit-rate usecase`: 每分鐘只能接受 60 個 requests
+- [x] 設計 `docker-compose`: Golang Server, Redis 配置
+- [x] 設計 `Redis repository`: 讀寫 Redis
+- [x] 設計 `limit-rate usecase`: 每分鐘只能接受 60 個 requests
   - 設計 SET: IP:requestsCount
   - SET 必須要有 60s expire time，每次更新都重置 expire time
-- [ ] 撰寫首頁，使用 `limit-rate usecase`，如果 usecase 成功就顯示 requests count，失敗就顯示 Error
+- [x] 撰寫首頁，使用 `limit-rate usecase`，如果 usecase 成功就顯示 requests count，失敗就顯示 Error
 - [ ] 撰寫 README
 - [ ] 撰寫 k8s yaml 檔案
+- [ ] Unit Test
 
 ## Development
 
@@ -28,6 +29,12 @@ $ docker-compose -f docker-compose.dev.yaml up
 
 ```bash
 $ docker-compose -f docker-compose.prod.yaml up --build
+```
+
+## Push to image repository
+
+```bash
+$ ./script/push-to-dockerHub.sh
 ```
 
 ## E2E testing
